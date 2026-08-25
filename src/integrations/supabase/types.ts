@@ -14,7 +14,161 @@ export type Database = {
   }
   public: {
     Tables: {
-      [_ in never]: never
+      api_keys: {
+        Row: {
+          allowed_models: string[]
+          created_at: string
+          id: string
+          key_hash: string
+          key_prefix: string
+          last_used_at: string | null
+          name: string
+          owner_id: string
+          project_id: string
+          rate_limit_per_min: number
+          revoked: boolean
+          token_cap: number
+          tokens_used: number
+        }
+        Insert: {
+          allowed_models?: string[]
+          created_at?: string
+          id?: string
+          key_hash: string
+          key_prefix: string
+          last_used_at?: string | null
+          name: string
+          owner_id: string
+          project_id: string
+          rate_limit_per_min?: number
+          revoked?: boolean
+          token_cap?: number
+          tokens_used?: number
+        }
+        Update: {
+          allowed_models?: string[]
+          created_at?: string
+          id?: string
+          key_hash?: string
+          key_prefix?: string
+          last_used_at?: string | null
+          name?: string
+          owner_id?: string
+          project_id?: string
+          rate_limit_per_min?: number
+          revoked?: boolean
+          token_cap?: number
+          tokens_used?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "api_keys_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
+      projects: {
+        Row: {
+          created_at: string
+          description: string | null
+          id: string
+          name: string
+          owner_id: string
+          slug: string
+        }
+        Insert: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          name: string
+          owner_id: string
+          slug: string
+        }
+        Update: {
+          created_at?: string
+          description?: string | null
+          id?: string
+          name?: string
+          owner_id?: string
+          slug?: string
+        }
+        Relationships: []
+      }
+      usage_logs: {
+        Row: {
+          api_key_id: string | null
+          completion_tokens: number
+          created_at: string
+          error: string | null
+          id: string
+          latency_ms: number
+          model: string | null
+          owner_id: string
+          project_id: string | null
+          prompt_tokens: number
+          requested_model: string | null
+          routing: string | null
+          source: string
+          status_code: number
+          task: string | null
+          total_tokens: number
+        }
+        Insert: {
+          api_key_id?: string | null
+          completion_tokens?: number
+          created_at?: string
+          error?: string | null
+          id?: string
+          latency_ms?: number
+          model?: string | null
+          owner_id: string
+          project_id?: string | null
+          prompt_tokens?: number
+          requested_model?: string | null
+          routing?: string | null
+          source?: string
+          status_code?: number
+          task?: string | null
+          total_tokens?: number
+        }
+        Update: {
+          api_key_id?: string | null
+          completion_tokens?: number
+          created_at?: string
+          error?: string | null
+          id?: string
+          latency_ms?: number
+          model?: string | null
+          owner_id?: string
+          project_id?: string | null
+          prompt_tokens?: number
+          requested_model?: string | null
+          routing?: string | null
+          source?: string
+          status_code?: number
+          task?: string | null
+          total_tokens?: number
+        }
+        Relationships: [
+          {
+            foreignKeyName: "usage_logs_api_key_id_fkey"
+            columns: ["api_key_id"]
+            isOneToOne: false
+            referencedRelation: "api_keys"
+            referencedColumns: ["id"]
+          },
+          {
+            foreignKeyName: "usage_logs_project_id_fkey"
+            columns: ["project_id"]
+            isOneToOne: false
+            referencedRelation: "projects"
+            referencedColumns: ["id"]
+          },
+        ]
+      }
     }
     Views: {
       [_ in never]: never
