@@ -1,0 +1,155 @@
+{
+  "version": 1,
+  "sdk_version": "0.28.0",
+  "path": "/mcp",
+  "auth": {
+    "type": "oauth",
+    "issuer": "https://vydbkrbaelbqnbanrnro.supabase.co/auth/v1",
+    "accepted_audiences": [
+      "authenticated"
+    ]
+  },
+  "mcp": {
+    "server": {
+      "name": "ai-connector-hub",
+      "version": "0.1.0",
+      "title": "AI Connector Hub"
+    },
+    "tools": [
+      {
+        "name": "ai_complete",
+        "title": "AI complete",
+        "description": "Run a task-routed completion through the hub's gateway. Picks a model from the task lane with ordered fallbacks and records usage.",
+        "annotations": {
+          "readOnlyHint": false,
+          "openWorldHint": true
+        },
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "prompt": {
+              "type": "string",
+              "minLength": 1,
+              "description": "The user prompt to complete."
+            },
+            "task": {
+              "anyOf": [
+                {
+                  "type": "string",
+                  "enum": [
+                    "auto",
+                    "chat",
+                    "fast",
+                    "classify",
+                    "extract",
+                    "summarize",
+                    "code",
+                    "reasoning"
+                  ]
+                },
+                {
+                  "type": "null"
+                }
+              ],
+              "description": "Routing lane; null routes through the auto lane."
+            },
+            "system": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "description": "Optional system instruction."
+            },
+            "model": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "description": "Optional explicit model override, e.g. google/gemini-3.7-flash."
+            }
+          },
+          "required": [
+            "prompt",
+            "task",
+            "system",
+            "model"
+          ],
+          "additionalProperties": false,
+          "$schema": "http://json-schema.org/draft-07/schema#"
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "list_connector_projects",
+        "title": "List connector projects",
+        "description": "List the signed-in owner's consumer projects with how many API keys each one has.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "$schema": "http://json-schema.org/draft-07/schema#",
+          "type": "object",
+          "properties": {}
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "list_api_keys",
+        "title": "List API keys",
+        "description": "List the owner's API keys with limits, allowlists and status. Secret values are never stored or returned.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "project_id": {
+              "type": [
+                "string",
+                "null"
+              ],
+              "description": "Optional project id filter; null lists every key."
+            }
+          },
+          "required": [
+            "project_id"
+          ],
+          "additionalProperties": false,
+          "$schema": "http://json-schema.org/draft-07/schema#"
+        },
+        "outputSchema": null
+      },
+      {
+        "name": "usage_summary",
+        "title": "Usage summary",
+        "description": "Summarise requests, tokens, errors and latency by model over a recent time window.",
+        "annotations": {
+          "readOnlyHint": true,
+          "idempotentHint": true,
+          "openWorldHint": false
+        },
+        "inputSchema": {
+          "type": "object",
+          "properties": {
+            "hours": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 720,
+              "description": "Look-back window in hours, e.g. 24."
+            }
+          },
+          "required": [
+            "hours"
+          ],
+          "additionalProperties": false,
+          "$schema": "http://json-schema.org/draft-07/schema#"
+        },
+        "outputSchema": null
+      }
+    ]
+  }
+}
