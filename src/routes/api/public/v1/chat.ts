@@ -128,8 +128,8 @@ export const Route = createFileRoute("/api/public/v1/chat")({
         const outcome = await runCompletion({
           candidates: permitted,
           messages,
-          maxTokens: body.max_tokens,
-          temperature: body.temperature,
+          ...(body.max_tokens !== undefined ? { maxTokens: body.max_tokens } : {}),
+          ...(body.temperature !== undefined ? { temperature: body.temperature } : {}),
         });
 
         if (!outcome.ok) {

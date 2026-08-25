@@ -118,12 +118,18 @@ export const updateKey = createServerFn({ method: "POST" })
       .parse(input),
   )
   .handler(async ({ data, context }) => {
-    const patch: Record<string, unknown> = {};
-    if (data.revoked !== undefined) patch["revoked"] = data.revoked;
-    if (data.rate_limit_per_min !== undefined) patch["rate_limit_per_min"] = data.rate_limit_per_min;
-    if (data.token_cap !== undefined) patch["token_cap"] = data.token_cap;
-    if (data.allowed_models !== undefined) patch["allowed_models"] = data.allowed_models.filter(isSupportedModel);
-    if (data.reset_tokens) patch["tokens_used"] = 0;
+    const patch: {
+      revoked?: boolean;
+      rate_limit_per_min?: number;
+      token_cap?: number;
+      allowed_models?: string[];
+      tokens_used?: number;
+    } = {};
+    if (data.revoked !== undefined) patch.revoked = data.revoked;
+    if (data.rate_limit_per_min !== undefined) patch.rate_limit_per_min = data.rate_limit_per_min;
+    if (data.token_cap !== undefined) patch.token_cap = data.token_cap;
+    if (data.allowed_models !== undefined) patch.allowed_models = data.allowed_models.filter(isSupportedModel);
+    if (data.reset_tokens) patch.tokens_used = 0;
     const { error } = await context.supabase.from("api_keys").update(patch).eq("id", data.id);
     if (error) throw new Error(error.message);
     return { ok: true };
