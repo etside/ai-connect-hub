@@ -30,3 +30,30 @@ dist-ssr
 *.njsproj
 *.sln
 *.sw?
+
+# Environment & secrets — never commit
+.env
+.env.*
+!.env.example
+*.pem
+*.key
+*.secret
+*.p12
+*.pfx
+*.crt
+*.cer
+id_rsa
+id_ed25519
+.secrets
+secrets.json
+credentials.json
+service-account.json
+firebase-adminsdk*.json
+
+# Kiro IDE settings (may contain tokens/paths)
+.kiro/settings/
+.kiro/sessions/
+
+# Supabase local config (contains service keys)
+supabase/.branches/
+supabase/.temp/
